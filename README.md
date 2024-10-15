@@ -1,10 +1,12 @@
 # ml_bench_demo
-a small demo for benchmarking some ml frameworks  used in a webserver inference (with rust) <br>
+a small demo for benchmarking some ml frameworks  used in a webserver inference (with rust) and yolov8 <br>
 this project depends on 
 
 - tract
 - tch-rs
 - ort
+
+currently  only tested on linux systems, for CPU inference only, though i might add GPU inference and other frameworks later. <br>
 
 
 # installing dependencies
