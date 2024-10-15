@@ -18,14 +18,17 @@ impl Inference for TractModel {
             .with_input_fact(0, f32::fact([1, 3, 320, 320]).into())?
             .into_optimized()?
             .into_runnable()?;
-        let loaded = TractModel { model: model, is_fp16: fp16 };
+        let loaded = TractModel {
+            model: model,
+            is_fp16: fp16,
+        };
         Ok(InferenceModel::TractInferenceModel(loaded))
     }
     fn forward(
         &self,
         input_image: &DynamicImage,
         confidence_threshold: f32,
-        iou_threshold: f32
+        iou_threshold: f32,
     ) -> Result<Vec<Bbox>, Error> {
         let preproc = preprocess_image(input_image)?;
         let forward = &self.model.run(tvec![preproc.to_owned().into()])?;
@@ -36,7 +39,6 @@ impl Inference for TractModel {
         Ok(non_maximum_suppression(_final, iou_threshold))
     }
 }
-
 
 /// add black bars padding to image
 pub fn preprocess_image(raw_image: &DynamicImage) -> Result<Tensor> {

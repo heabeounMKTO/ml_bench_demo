@@ -1,5 +1,4 @@
 /// TODO: gpu inference
-
 use crate::bbox::non_maximum_suppression;
 use crate::bbox::Bbox;
 use crate::inference_model::Inference;
@@ -11,8 +10,6 @@ use image::{DynamicImage, GenericImageView};
 use ndarray::{s, Array, ArrayBase, Axis, Dim, IxDyn, OwnedRepr};
 use ort::{inputs, CPUExecutionProvider, GraphOptimizationLevel, Session};
 
-
-
 impl Inference for OnnxModel {
     fn load(model_path: &str, fp16: bool) -> Result<InferenceModel, Error> {
         let model: Session = Session::builder()
@@ -23,19 +20,23 @@ impl Inference for OnnxModel {
             .unwrap()
             .commit_from_file(model_path)
             .unwrap();
-        let loaded = OnnxModel { model: model, is_fp16: fp16 }; 
+        let loaded = OnnxModel {
+            model: model,
+            is_fp16: fp16,
+        };
         Ok(InferenceModel::OnnxInferenceModel(loaded))
     }
 
-    
     fn forward(
         &self,
         input_image: &DynamicImage,
         confidence_threshold: f32,
-        iou_threshold: f32
+        iou_threshold: f32,
     ) -> Result<Vec<Bbox>, Error> {
         let preprocess_image = preprocess_image(input_image)?;
-        let inference = &self.model.run(inputs!["images" => preprocess_image.view()]?)?;
+        let inference = &self
+            .model
+            .run(inputs!["images" => preprocess_image.view()]?)?;
         let _raw_output = inference["output0"]
             .try_extract_tensor::<f32>()?
             .view()
@@ -61,15 +62,17 @@ impl Inference for OnnxModel {
                 let y1 = y - h / 2.0;
                 let x2 = x + w / 2.0;
                 let y2 = y + h / 2.0;
-                let bbox =
-                    Bbox::new(x1, y1, x2, y2, confidence).apply_image_scale(&input_image, w_new, h_new);
+                let bbox = Bbox::new(x1, y1, x2, y2, confidence).apply_image_scale(
+                    &input_image,
+                    w_new,
+                    h_new,
+                );
                 bbox_vec.push(bbox);
             }
         }
         Ok(non_maximum_suppression(bbox_vec, iou_threshold))
     }
 }
-
 
 fn scale_wh(w0: f32, h0: f32, w1: f32, h1: f32) -> (f32, f32, f32) {
     let r = (w1 / w0).min(h1 / h0);

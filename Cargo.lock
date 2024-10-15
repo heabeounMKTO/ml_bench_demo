@@ -15,6 +15,7 @@ dependencies = [
  "nalgebra",
  "ndarray 0.16.1",
  "ort",
+ "serde",
  "tch",
  "tract",
  "tract-onnx",

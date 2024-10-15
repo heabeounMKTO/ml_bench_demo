@@ -16,8 +16,16 @@ anyhow = "1.0.89"
 actix-web = "4.9.0"
 actix-files = "0.6.6"
 tch = "0.17.0"
+serde = { version = "1.0.210", features = ["derive"] }
 
 
+[[bin]]
+name="demo_webserver"
+path="src/webserver.rs"
+
+[lib]
+name="yolo_mulitbackend_demo"
+path="src/lib.rs"
 
 
 [profile.release]
