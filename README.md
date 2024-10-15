@@ -18,7 +18,7 @@ export LD_LIBRARY_PATH=/path/to/libonnxruntime/lib${LD_LIBRARY_PATH:+:${LD_LIBRA
 export LIBTORCH=/path/to/libtorch
 export LD_LIBRARY_PATH=${LIBTORCH}/lib:$LD_LIBRARY_PATH
 ```
-refresh your shell by running `source ~/.bashrc` or `exec $SHELL`
+refresh your shell by running `source ~/.bashrc`, `source ~/.zshrc` or `exec $SHELL`
 
 
 # building the project
@@ -34,6 +34,6 @@ cargo build --bin local --release
 ```
 
 # using the project as a library 
-todo 
+currently it's possible , but i havent documented it (Yet) 
 
 
