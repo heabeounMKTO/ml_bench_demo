@@ -11,10 +11,12 @@ pub struct OnnxModel {
     pub is_fp16: bool,
     pub model: Session,
 }
+
 pub struct TorchModel {
     pub is_fp16: bool,
     pub model: CModule,
 }
+
 pub struct TractModel {
     pub is_fp16: bool,
     pub model: SimplePlan<

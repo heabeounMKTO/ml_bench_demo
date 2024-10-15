@@ -4,7 +4,7 @@ mod get_face_torch;
 mod get_face_tract;
 mod inference_model;
 mod web_ops;
-
+use web_ops::service::{index};
 use clap::Parser;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
@@ -42,16 +42,16 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=debug");
     let args = CliArgs::parse();
     let backend_index = args.backend;
-    let load_model = match backend_index {
+    let load_model : InferenceModel= match backend_index {
         0 => {
-            OnnxModel::load("models/yolov8n_face.onnx", false);
+            OnnxModel::load("models/yolov8n_face.onnx", false).unwrap()
         },
         
         1 => {
-            TorchModel::load("models/yolov8n-face.torchscript", false);
+            TorchModel::load("models/yolov8n-face.torchscript", false).unwrap()
         },
         2 => {
-            TractModel::load("models/yolov8n_face.onnx", false);
+            TractModel::load("models/yolov8n_face.onnx", false).unwrap()
         },
         _ => {
             panic!("invalid backend index supplied!?") 
@@ -59,11 +59,13 @@ async fn main() -> std::io::Result<()> {
     }; 
     let bind_addr = format!("0.0.0.0:{}", 9995);
 
-    HttpServer::new(move || {
         let _wrap_detector = web::Data::new(
             load_model
         );
-        App::new().app_data(_wrap_detector).wrap(Logger::default())    
+    HttpServer::new( move || {
+        App::new()
+            .service(index)
+            .app_data(_wrap_detector.clone()).wrap(Logger::default())    
     })    
     .client_request_timeout(std::time::Duration::from_secs(0))
     .keep_alive(None)
