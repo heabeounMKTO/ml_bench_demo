@@ -1,4 +1,4 @@
-use crate::bbox::Bbox;
+use crate::bbox::{non_maximum_suppression, Bbox};
 use crate::inference_model::{Inference, InferenceModel, TorchModel};
 use anyhow::{Error, Result};
 use image::{DynamicImage, GenericImageView, ImageEncoder};
@@ -29,9 +29,8 @@ impl Inference for TorchModel {
         let pred = self.model.forward_ts(&[pp])?.to_device(tch::Device::Cpu); 
         println!("PRED {:?}", pred.get(0));
 
-        let _res = post_process_tch_fwd(&pred.get(0), confidence_threshold,iou_threshold, input_image);
-        let _d: Vec<Bbox> = vec![];
-        Ok(_d)
+        let _res = post_process_tch_fwd(&pred.get(0), confidence_threshold,iou_threshold, input_image)?;
+        Ok(_res)
     }
 }
 
@@ -61,15 +60,27 @@ fn post_process_tch_fwd(pred: &tch::Tensor, conf_thresh: f32, iou_thresh: f32, i
         320.0,
         320.0,
     );
-    let bbox_vec: Vec<Bbox> = vec![];
+    let mut bbox_vec: Vec<Bbox> = vec![];
     let _pred = pred.squeeze_dim(0);
     for index  in 0..pred_size {
         // println!("row {:?}", _pred.get(4).get(index));
         let confidence = _pred.get(4).get(index).double_value(&[]) as f32;
         if confidence >= conf_thresh {
-            println!("CONFIDENCE {:?}", confidence);
+            let x = _pred.get(0).get(index).double_value(&[]) as f32;
+            let y = _pred.get(1).get(index).double_value(&[]) as f32;
+            let w = _pred.get(2).get(index).double_value(&[]) as f32;
+            let h = _pred.get(3).get(index).double_value(&[]) as f32;
+                let x1 = x - w / 2.0;
+                let y1 = y - h / 2.0;
+                let x2 = x + w / 2.0;
+                let y2 = y + h / 2.0;
+                let bbox = Bbox::new(x1, y1, x2, y2, confidence).apply_image_scale(
+                    &input_image,
+                    320.0,
+                    320.0,
+                );
+                bbox_vec.push(bbox);
         }
     }
-    println!("BBOX VEC {:?}", bbox_vec);
-    Ok(bbox_vec)
+    Ok(non_maximum_suppression(bbox_vec, iou_thresh))
 }
