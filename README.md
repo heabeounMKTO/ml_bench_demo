@@ -10,7 +10,7 @@ currently  only tested on linux systems, for CPU inference only, though i might 
 
 
 # installing dependencies
-you need to link C++ libraries libonnxruntime and libtorch, so download them and then add it to your LD_LIBRARY_PATH (on linux)
+you need to link C++ libraries libonnxruntime and libtorch, so download them and then add it to your LD_LIBRARY_PATH (on linux) <br>
 you can find libonnxruntime [here](https://github.com/microsoft/onnxruntime/releases) we use version 1.18.1, <br>
 and libtorch [here](https://pytorch.org/) we use version 2.4.0
 
