@@ -8,7 +8,10 @@ this project depends on
 
 
 # installing dependencies
-you need to link C++ libraries libonnxruntime and libtorch, and then add it to your LD_LIBRARY_PATH (on linux)
+you need to link C++ libraries libonnxruntime and libtorch, so download them and then add it to your LD_LIBRARY_PATH (on linux)
+you can find libonnxruntime [here](https://github.com/microsoft/onnxruntime/releases) we use version 1.18.1, <br>
+and libtorch [here](https://pytorch.org/) we use version 2.4.0
+
 
 ```
 export LD_LIBRARY_PATH=/path/to/libonnxruntime/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
@@ -29,5 +32,8 @@ the local demo
 ```bash
 cargo build --bin local --release
 ```
+
+# using the project as a library 
+todo 
 
 
