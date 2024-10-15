@@ -15,7 +15,7 @@ fn main() {
     let mut tract_time: Vec<u128> = vec![];
     let mut torch_time: Vec<u128> = vec![];
 
-    for _ in 0..20 {
+    for _ in 0..100 {
         let t1 = std::time::Instant::now();
         let _ = get_bbox(&_onnx, &test_img, 0.5,0.5);
         onnx_time.push(t1.elapsed().as_millis()); 

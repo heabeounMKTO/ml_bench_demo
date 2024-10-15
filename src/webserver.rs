@@ -28,7 +28,6 @@ async fn main() -> std::io::Result<()> {
     let backend_index = args.backend;
     let load_model: InferenceModel = match backend_index {
         0 => OnnxModel::load("models/yolov8n_face.onnx", false).unwrap(),
-
         1 => TorchModel::load("models/yolov8n-face.torchscript", false).unwrap(),
         2 => TractModel::load("models/yolov8n_face.onnx", false).unwrap(),
         _ => {
@@ -49,7 +48,7 @@ async fn main() -> std::io::Result<()> {
     .client_request_timeout(std::time::Duration::from_secs(0))
     .keep_alive(None)
     .bind(&bind_addr)?
-    .workers(1)
+    .workers(8)
     .run()
     .await
 }
