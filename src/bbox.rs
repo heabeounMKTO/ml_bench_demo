@@ -8,7 +8,6 @@ use std::cmp::PartialOrd;
 use tract_ndarray::{s, ArrayBase, Dim, IxDynImpl, OwnedRepr};
 use tract_onnx::prelude::*;
 
-
 /// the coords can either be cartisean or no
 /// TODO: maybe add a coord type enum idk
 #[derive(Debug, Clone)]
@@ -73,8 +72,6 @@ impl Bbox {
         ))
     }
 }
-
-
 
 pub fn non_maximum_suppression(mut boxes: Vec<Bbox>, iou_threshold: f32) -> Vec<Bbox> {
     boxes.sort_by(|a, b| {

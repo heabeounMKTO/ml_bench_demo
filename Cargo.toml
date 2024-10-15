@@ -15,7 +15,7 @@ ndarray = {version="0.16.1"}
 anyhow = "1.0.89"
 actix-web = "4.9.0"
 actix-files = "0.6.6"
-# tch = "0.17.0"
+tch = "0.17.0"
 
 
 

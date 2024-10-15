@@ -1,29 +1,42 @@
+use crate::bbox::non_maximum_suppression;
 use crate::bbox::Bbox;
+use crate::inference_model::InferenceModel;
 use anyhow::{Error, Result};
 use clap::Parser;
-use crate::bbox::{non_maximum_suppression};
 use image::{DynamicImage, GenericImageView};
 use std::cmp::Ordering;
 use std::cmp::PartialOrd;
 use tract_ndarray::{s, ArrayBase, Dim, IxDynImpl, OwnedRepr};
 use tract_onnx::prelude::*;
-/// loads model, just panics if anything goes wrong
-/// THATS BY DESIGN
-pub fn load_model(
-    model_path: &str,
-) -> SimplePlan<TypedFact, Box<dyn TypedOp>, tract_onnx::prelude::Graph<TypedFact, Box<dyn TypedOp>>>
-{
-    let model = tract_onnx::onnx()
-        .model_for_path(model_path)
-        .unwrap()
-        .with_input_fact(0, f32::fact([1, 3, 320, 320]).into())
-        .unwrap()
-        .into_optimized()
-        .unwrap()
-        .into_runnable()
-        .unwrap();
-    model
+
+use crate::inference_model::{Inference, TractModel};
+
+impl Inference for TractModel {
+    fn load(model_path: &str, fp16: bool) -> Result<InferenceModel, Error> {
+        let model = tract_onnx::onnx()
+            .model_for_path(model_path)? // maybe i will put in a shape input one of these days
+            .with_input_fact(0, f32::fact([1, 3, 320, 320]).into())?
+            .into_optimized()?
+            .into_runnable()?;
+        let loaded = TractModel { model: model, is_fp16: fp16 };
+        Ok(InferenceModel::TractInferenceModel(loaded))
+    }
+    fn forward(
+        &self,
+        input_image: &DynamicImage,
+        confidence_threshold: f32,
+        iou_threshold: f32
+    ) -> Result<Vec<Bbox>, Error> {
+        let preproc = preprocess_image(input_image)?;
+        let forward = &self.model.run(tvec![preproc.to_owned().into()])?;
+        let results = forward[0].to_array_view::<f32>()?.view().t().into_owned();
+        let _final = process_results(results, input_image, confidence_threshold, iou_threshold)?;
+        // do a NMS pass on final bboxes that way we dont need to
+        // sort 1000+++++++ boxes for no reason..
+        Ok(non_maximum_suppression(_final, iou_threshold))
+    }
 }
+
 
 /// add black bars padding to image
 pub fn preprocess_image(raw_image: &DynamicImage) -> Result<Tensor> {
@@ -73,7 +86,7 @@ fn process_results(
             let x2 = x + w / 2.0;
             let y2 = y + h / 2.0;
             let bbox =
-            Bbox::new(x1, y1, x2, y2, confidence).apply_image_scale(&input_image, 320.0, 320.0);
+                Bbox::new(x1, y1, x2, y2, confidence).apply_image_scale(&input_image, 320.0, 320.0);
             results_vec.push(bbox);
         }
     }
