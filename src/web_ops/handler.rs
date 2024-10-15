@@ -4,8 +4,8 @@ use actix_multipart::form::text::Text;
 use actix_multipart::form::MultipartForm;
 use actix_multipart::Multipart;
 
-use serde::{Deserialize, Serialize};
 use anyhow::{Error, Result};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, MultipartForm)]
 pub struct GetFaceRequest {
@@ -22,7 +22,7 @@ impl GetFaceResponse {
     pub fn send_with_inference_time(bbox: Vec<Bbox>, inf_time: f32) -> GetFaceResponse {
         GetFaceResponse {
             data: bbox,
-            message: format!("success! \n time: {}ms", inf_time)
+            message: format!("success! \n time: {}ms", inf_time),
         }
     }
 }

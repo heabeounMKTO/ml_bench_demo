@@ -14,9 +14,9 @@ use web_ops::service::{get_face_bbox_yolo, index};
 #[derive(clap::Parser)]
 struct CliArgs {
     /// backend index
-    /// 0 -> onnx
-    /// 1 -> torch
-    /// 2 -> tract
+    /// 0 = onnx
+    /// 1 = torch
+    /// 2 = tract
     #[arg(long)]
     backend: i32,
 }
@@ -42,7 +42,6 @@ async fn main() -> std::io::Result<()> {
             .service(index)
             .service(get_face_bbox_yolo)
             .app_data(_wrap_detector.clone())
-
             .wrap(Logger::default())
     })
     .client_request_timeout(std::time::Duration::from_secs(0))

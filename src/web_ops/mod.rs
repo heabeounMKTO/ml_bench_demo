@@ -2,10 +2,9 @@ pub mod handler;
 pub mod responder;
 pub mod service;
 
-
 use actix_multipart::form::tempfile::TempFile;
 use base64::{engine::general_purpose, Engine as _};
-use image::{DynamicImage,ImageFormat, ImageReader};
+use image::{DynamicImage, ImageFormat, ImageReader};
 use std::io::{Cursor, Read};
 
 /// turns a [TempFile] from [actix_multipart::Multipart] into a [DynamicImage]
@@ -20,10 +19,11 @@ pub fn tempfile_to_dynimg(input_tempfile: TempFile) -> actix_web::Result<Dynamic
     Ok(img)
 }
 
-
 pub fn dynimg_to_bytes(input_img: &DynamicImage) -> Vec<u8> {
     let mut img_bytes: Vec<u8> = Vec::new();
-    input_img.write_to(&mut Cursor::new(&mut img_bytes), image::ImageFormat::Png).unwrap(); 
+    input_img
+        .write_to(&mut Cursor::new(&mut img_bytes), image::ImageFormat::Png)
+        .unwrap();
     img_bytes
 }
 
