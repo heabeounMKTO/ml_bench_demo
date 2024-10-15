@@ -45,7 +45,7 @@ pub trait Inference {
 
 /// big ass abstraction layer my homies
 pub fn get_bbox(
-    loaded_model: InferenceModel,
+    loaded_model: &InferenceModel,
     input_image: &DynamicImage,
     confidence_threshold: f32,
     iou_threshold: f32,

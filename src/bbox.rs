@@ -7,10 +7,12 @@ use std::cmp::Ordering;
 use std::cmp::PartialOrd;
 use tract_ndarray::{s, ArrayBase, Dim, IxDynImpl, OwnedRepr};
 use tract_onnx::prelude::*;
+use serde::{Deserialize, Serialize};
+
 
 /// the coords can either be cartisean or no
 /// TODO: maybe add a coord type enum idk
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Bbox {
     pub x1: f32,
     pub y1: f32,

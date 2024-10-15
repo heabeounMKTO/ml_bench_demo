@@ -11,6 +11,7 @@ dependencies = [
  "actix-multipart",
  "actix-web",
  "anyhow",
+ "base64 0.22.1",
  "clap 4.5.20",
  "image",
  "nalgebra",
