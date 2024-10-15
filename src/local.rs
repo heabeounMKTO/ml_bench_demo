@@ -3,7 +3,7 @@ mod get_face_onnx;
 mod get_face_torch;
 mod get_face_tract;
 mod inference_model;
-use inference_model::{get_bbox, Inference, InferenceModel, OnnxModel, TorchModel, TractModel};
+use inference_model::{get_bbox, Inference, OnnxModel, TorchModel, TractModel};
 
 
 fn main() {
