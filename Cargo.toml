@@ -25,6 +25,10 @@ base64 = "0.22.1"
 name="demo_webserver"
 path="src/webserver.rs"
 
+[[bin]]
+name="local"
+path="src/local.rs"
+
 [lib]
 name="yolo_mulitbackend_demo"
 path="src/lib.rs"

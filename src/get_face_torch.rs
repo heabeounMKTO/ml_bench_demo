@@ -27,7 +27,6 @@ impl Inference for TorchModel {
     ) -> Result<Vec<Bbox>, Error> {
         let pp = preprocess_image(input_image)?;
         let pred = self.model.forward_ts(&[pp])?.to_device(tch::Device::Cpu);
-        println!("PRED {:?}", pred.get(0));
 
         let _res = post_process_tch_fwd(
             &pred.get(0),
@@ -67,7 +66,6 @@ fn post_process_tch_fwd(
     input_image: &DynamicImage,
 ) -> Result<Vec<Bbox>, Error> {
     let (npreds, pred_size) = pred.size2().unwrap();
-    println!("NPREDS {:?}", npreds);
     let (_, w_new, h_new) = scale_wh(
         input_image.width() as f32,
         input_image.height() as f32,
