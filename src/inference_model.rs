@@ -1,3 +1,4 @@
+use std::fmt;
 use crate::bbox::Bbox;
 use crate::get_face_onnx;
 use crate::get_face_tract;
@@ -41,6 +42,22 @@ pub trait Inference {
         confidence_threshold: f32,
         iou_threshold: f32,
     ) -> Result<Vec<Bbox>, Error>;
+}
+
+impl fmt::Display for InferenceModel {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            InferenceModel::OnnxInferenceModel(onnx_disp) => {
+                write!(f, "InferenceModel using Onnx backend\nINFO: {}", onnx_disp)
+            },
+            InferenceModel::TorchInferenceModel(_) => {
+                write!(f, "InferenceModel using Torch backend")
+            },
+            InferenceModel::TractInferenceModel(_) => {
+                write!(f, "InferenceModel using Tract backend")
+            }
+        }
+    }
 }
 
 /// big ass abstraction layer my homies
