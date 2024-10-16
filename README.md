@@ -39,3 +39,40 @@ cargo build --bin local --release
 currently it's possible , but i havent documented it (Yet) 
 
 
+# Performance 
+## 1 Worker 
+
+### ort (libonnxruntime)
+![onnx](reports/onnx_1worker.png)
+
+### tch-rs (libtorch)
+![tch](reports/torch_1worker.png)
+
+### tract
+![tract](reports/tract_1worker.png)
+
+
+
+## 4 Worker 
+
+### ort (libonnxruntime)
+![onnx](reports/onnx_4worker.png)
+
+### tch-rs (libtorch)
+![tch](reports/torch_4worker.png)
+
+### tract
+![tract](reports/tract_4worker.png)
+
+
+## 4 Worker 
+
+### ort (libonnxruntime)
+![onnx](reports/onnx_16worker.png)
+
+### tch-rs (libtorch)
+![tch](reports/torch_16worker.png)
+
+### tract
+![tract](reports/tract_16worker.png)
+
