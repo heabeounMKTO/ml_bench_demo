@@ -65,7 +65,7 @@ currently it's possible , but i havent documented it (Yet)
 ![tract](reports/tract_4worker.png)
 
 
-## 4 Worker 
+## 16 Worker 
 
 ### ort (libonnxruntime)
 ![onnx](reports/onnx_16worker.png)
