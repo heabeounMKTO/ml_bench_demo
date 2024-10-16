@@ -19,6 +19,7 @@ tch = "0.17.0"
 serde = { version = "1.0.210", features = ["derive"] }
 actix-multipart = { version = "0.7.2", features = ["tempfile"] }
 base64 = "0.22.1"
+rand = "0.8.5"
 
 
 [[bin]]

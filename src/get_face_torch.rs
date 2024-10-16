@@ -65,13 +65,7 @@ fn post_process_tch_fwd(
     iou_thresh: f32,
     input_image: &DynamicImage,
 ) -> Result<Vec<Bbox>, Error> {
-    let (npreds, pred_size) = pred.size2().unwrap();
-    let (_, w_new, h_new) = scale_wh(
-        input_image.width() as f32,
-        input_image.height() as f32,
-        320.0,
-        320.0,
-    );
+    let (_, pred_size) = pred.size2().unwrap();
     let mut bbox_vec: Vec<Bbox> = vec![];
     let _pred = pred.squeeze_dim(0);
     for index in 0..pred_size {

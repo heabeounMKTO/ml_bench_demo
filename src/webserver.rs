@@ -19,12 +19,16 @@ struct CliArgs {
     /// 2 = tract
     #[arg(long)]
     backend: i32,
+
+    #[arg(long)]
+    workers: i32
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=debug");
     let args = CliArgs::parse();
+    let workers = args.workers;
     let backend_index = args.backend;
     let load_model: InferenceModel = match backend_index {
         0 => OnnxModel::load("models/yolov8n_face.onnx", false).unwrap(),
@@ -36,8 +40,8 @@ async fn main() -> std::io::Result<()> {
     };
     let bind_addr = format!("0.0.0.0:{}", 9995);
     println!(
-        "running server on {}\nusing {} backend",
-        &bind_addr, &load_model
+        "running server on {}\nusing {} backend\nwith {} workers",
+        &bind_addr, &load_model, &workers
     );
 
     let _wrap_detector = web::Data::new(load_model);
@@ -51,7 +55,7 @@ async fn main() -> std::io::Result<()> {
     .client_request_timeout(std::time::Duration::from_secs(0))
     .keep_alive(None)
     .bind(&bind_addr)?
-    .workers(8)
+    .workers(workers as usize)
     .run()
     .await
 }

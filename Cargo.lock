@@ -17,6 +17,7 @@ dependencies = [
  "nalgebra",
  "ndarray 0.16.1",
  "ort",
+ "rand",
  "serde",
  "tch",
  "tract",
