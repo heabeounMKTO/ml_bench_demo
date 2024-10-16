@@ -35,7 +35,10 @@ async fn main() -> std::io::Result<()> {
         }
     };
     let bind_addr = format!("0.0.0.0:{}", 9995);
-    println!("running server on {}\nusing {} backend", &bind_addr, &load_model);
+    println!(
+        "running server on {}\nusing {} backend",
+        &bind_addr, &load_model
+    );
 
     let _wrap_detector = web::Data::new(load_model);
     HttpServer::new(move || {

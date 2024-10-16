@@ -1,10 +1,10 @@
-use std::fmt;
 use crate::bbox::Bbox;
 use crate::get_face_onnx;
 use crate::get_face_tract;
 use anyhow::{Error, Result};
 use image::DynamicImage;
 use ort::Session;
+use std::fmt;
 use tch::CModule;
 use tract_onnx::prelude::*;
 
@@ -49,10 +49,10 @@ impl fmt::Display for InferenceModel {
         match self {
             InferenceModel::OnnxInferenceModel(onnx_disp) => {
                 write!(f, "InferenceModel using Onnx backend\nINFO: {}", onnx_disp)
-            },
+            }
             InferenceModel::TorchInferenceModel(_) => {
                 write!(f, "InferenceModel using Torch backend")
-            },
+            }
             InferenceModel::TractInferenceModel(_) => {
                 write!(f, "InferenceModel using Tract backend")
             }

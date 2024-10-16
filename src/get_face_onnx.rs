@@ -11,14 +11,15 @@ use ndarray::{s, Array, ArrayBase, Axis, Dim, OwnedRepr};
 use ort::{inputs, CPUExecutionProvider, GraphOptimizationLevel, Session};
 use std::fmt;
 
-
 impl fmt::Display for OnnxModel {
-   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "OnnxModel fp16: {}\ninputs: {:?}\noutput: {:?} ",
-            self.is_fp16, self.model.inputs, self.model.outputs)
-    } 
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "OnnxModel fp16: {}\ninputs: {:?}\noutput: {:?} ",
+            self.is_fp16, self.model.inputs, self.model.outputs
+        )
+    }
 }
-
 
 impl Inference for OnnxModel {
     fn load(model_path: &str, fp16: bool) -> Result<InferenceModel, Error> {
